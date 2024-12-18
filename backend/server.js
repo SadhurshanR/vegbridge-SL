@@ -13,22 +13,20 @@ const GuideRoutes = require('./routes/guideRoutes');
 
 // Initialize express app
 const app = express();
-
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, // Ensure this is your frontend URL (e.g., 'https://yourfrontend.com')
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'], // You can add more headers if necessary
-  credentials: true, // Allow cookies, authorization headers, etc.
-  preflightContinue: false, // Preflight requests are automatically handled by the browser
-  optionsSuccessStatus: 204, // Success status for preflight requests
+  origin: [
+    process.env.FRONTEND_URL,  // Allow requests from frontend
+    'https://res.cloudinary.com',  // Allow Cloudinary domain
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,  // Allow credentials (if needed)
 };
 
-app.use(cors(corsOptions)); // Enable CORS for all routes
-app.options('*', cors(corsOptions)); // Handle preflight requests globally
+app.use(cors(corsOptions));
 
-// Parse JSON request bodies
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // Parse JSON request bodies
 
 // MongoDB Connection
 connectDB();
