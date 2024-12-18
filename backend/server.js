@@ -16,10 +16,7 @@ const app = express();
 
 // CORS Configuration
 const corsOptions = {
-  origin: [
-    process.env.FRONTEND_URL,  // Allow requests from the frontend URL
-    'https://res.cloudinary.com',  // Allow Cloudinary domain (if using)
-  ],
+  origin: process.env.FRONTEND_URL,  // Allow requests only from the frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow necessary HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'],  // Allow these headers
   credentials: true,  // Allow credentials (cookies, etc.)
@@ -28,12 +25,6 @@ const corsOptions = {
 // Apply CORS middleware
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));  // Handle preflight requests
-
-// Log CORS headers for debugging (Optional)
-app.use((req, res, next) => {
-  console.log('CORS Headers:', res.getHeaders()); // Log the response headers
-  next();
-});
 
 app.use(bodyParser.json());  // Parse JSON request bodies
 
