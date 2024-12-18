@@ -13,21 +13,29 @@ const GuideRoutes = require('./routes/guideRoutes');
 
 // Initialize express app
 const app = express();
+
 // CORS Configuration
 const corsOptions = {
   origin: [
-    process.env.FRONTEND_URL,  // Allow requests from frontend
-    'https://res.cloudinary.com',  // Allow Cloudinary domain
+    process.env.FRONTEND_URL,  // Allow requests from the frontend URL
+    'https://res.cloudinary.com',  // Allow Cloudinary domain (if using)
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,  // Allow credentials (if needed)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow necessary HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow these headers
+  credentials: true,  // Allow credentials (cookies, etc.)
 };
 
+// Apply CORS middleware
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options('*', cors(corsOptions));  // Handle preflight requests
 
-app.use(bodyParser.json()); // Parse JSON request bodies
+// Log CORS headers for debugging (Optional)
+app.use((req, res, next) => {
+  console.log('CORS Headers:', res.getHeaders()); // Log the response headers
+  next();
+});
+
+app.use(bodyParser.json());  // Parse JSON request bodies
 
 // MongoDB Connection
 connectDB();
@@ -58,11 +66,8 @@ app.use('/GuideImages', express.static(guideImagesDir));
 // Use routes
 app.use('/api', authRoutes);
 app.use('/api/products', productRoutes); 
-
-
 app.use('/api/orders', orderRoutes); 
 app.use('/api/guides', GuideRoutes);
-
 
 // Start the Server
 const PORT = process.env.PORT || 5000;
