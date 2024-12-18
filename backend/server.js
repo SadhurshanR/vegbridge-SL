@@ -16,13 +16,12 @@ const app = express();
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL,  // Allow requests only from the frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow necessary HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow these headers
-  credentials: true,  // Allow credentials (cookies, etc.)
+  origin: process.env.FRONTEND_URL, // Make sure this environment variable is correctly set to your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // If you're using cookies or other credentials
 };
 
-// Apply CORS middleware
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));  // Handle preflight requests
 
