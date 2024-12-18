@@ -16,16 +16,19 @@ const app = express();
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, // Make sure this environment variable is correctly set to your frontend URL
+  origin: process.env.FRONTEND_URL, // Ensure this is your frontend URL (e.g., 'https://yourfrontend.com')
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // If you're using cookies or other credentials
+  allowedHeaders: ['Content-Type', 'Authorization'], // You can add more headers if necessary
+  credentials: true, // Allow cookies, authorization headers, etc.
+  preflightContinue: false, // Preflight requests are automatically handled by the browser
+  optionsSuccessStatus: 204, // Success status for preflight requests
 };
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));  // Handle preflight requests
+app.use(cors(corsOptions)); // Enable CORS for all routes
+app.options('*', cors(corsOptions)); // Handle preflight requests globally
 
-app.use(bodyParser.json());  // Parse JSON request bodies
+// Parse JSON request bodies
+app.use(bodyParser.json());
 
 // MongoDB Connection
 connectDB();
